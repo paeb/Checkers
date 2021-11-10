@@ -1,6 +1,9 @@
 import numpy as np
+from Piece import Piece
 
 class Board:
-    board = np.zeros((8,8))
+
+    def 
+    self._board = np.zeros((8,8))
 
     
