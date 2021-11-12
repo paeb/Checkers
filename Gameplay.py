@@ -2,30 +2,21 @@ from Piece import Piece
 from Board import Board
 from Color import Color
 
-# Define a dictionary for the four directions in which a piece can move. 
-
-directions = {["forward","left"]:[-1,1],
-                ["forward","right"]:[1,1],
-                ["backward","left"]:[-1,-1],
-                ["backward","right"]:[1,-1]
-                }
-
-
-directions = dict()
-
 class Gameplay():
     def __init__(self, pieces):
         self._pieces = pieces
 
-    def check_piece(x,y, pieces): # Check if a piece is in a given position
+    def check_piece(x,y, pieces): # Check if a piece is in a given position and its color
         check = False
-        for p in pieces:
+        type = None
+        for p in self._pieces:
             if (p.x == x and p.y == y):
                 check = True
-        return check
+                type = p._color
+        return check, type
 
     def move(self,piece,direction):
-        # Direction is either ["forward","left"], ["forward","right"], ["backward","left"], or ["backward","right"]
+        # Direction is numerical and given by [dx, dy]
         
         # Make sure that the piece can only move in the directions allowed by its color.
         # Black can move forward; white can move backward.
@@ -34,10 +25,18 @@ class Gameplay():
         if piece._color == Color.WHITE:
             assert direction[0] == "backward"
 
-        # Represent the change in position numerically based on the string input of direction.
-        [dx, dy] = directions[direction]
+        
+        [dx, dy] = direction
         [x,y] = [piece._x, piece._y]
         self.check_piece(x + dx, y + dy, self._pieces)
 
+        # Check whether there already is a piece where the current piece wishes to move.
+        if self.check_piece(x + dx, y + dy, self.pieces)[0]: 
+            pass
+
+        return None # Change this later 
+
 board = Board()
 board.show()
+        
+        
