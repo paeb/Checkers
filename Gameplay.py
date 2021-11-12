@@ -17,7 +17,7 @@ class Gameplay():
     def __init__(self, pieces):
         self._pieces = pieces
 
-    def check_piece(self,x,y,pieces): # Check if a piece is in a given position
+    def check_piece(x,y, pieces): # Check if a piece is in a given position
         check = False
         for p in pieces:
             if (p.x == x and p.y == y):
@@ -41,3 +41,4 @@ class Gameplay():
 
 board = Board()
 board.show()
+        
