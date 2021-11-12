@@ -45,7 +45,20 @@ class Board:
                 row = 7
 
     def show(self):
-        for row in self._board:
-            for val in row:
-                print(val,end=' | ')
-            print('')
+
+        print(' ___ ___ ___ ___ ___ ___ ___ ___')
+        for i in range(8): # each row
+            for j in range(8): # each column
+                val = self._board[i][j]
+                if val == 0:
+                    val = ' '
+
+                ending = '_|_'
+                if j == 0:
+                    print('|_',end='')
+                elif j == 7:
+                    ending = '_| ' + str(i)
+                
+                print(str(val) + '\u0332',end=ending)
+            print() # new line
+        print("  0   1   2   3   4   5   6   7  ")
