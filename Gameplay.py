@@ -4,7 +4,7 @@ from Color import Color
 
 class Gameplay():
     def __init__(self, pieces):
-        self.pieces = pieces
+        self._pieces = pieces
 
     def check_piece(x,y, pieces): # Check if a piece is in a given position and its color
         check = False
@@ -28,7 +28,15 @@ class Gameplay():
         
         [dx, dy] = direction
         [x,y] = [piece._x, piece._y]
-        
+        self.check_piece(x + dx, y + dy, self._pieces)
+
         # Check whether there already is a piece where the current piece wishes to move.
         if self.check_piece(x + dx, y + dy, self.pieces)[0]: 
-            
+            pass
+
+        return None # Change this later 
+
+board = Board()
+board.show()
+        
+        
