@@ -1,4 +1,6 @@
 from Piece import Piece
+from Board import Board
+from Color import Color
 
 # Define a dictionary for the four directions in which a piece can move. 
 directions = {["forward","left"]:[-1,1],
@@ -31,5 +33,5 @@ class Gameplay():
         # Represent the change in position numerically based on the string input of direction.
         [dx, dy] = directions[direction]
         [x,y] = [piece._x, piece._y]
-        check_piece(x + dx, y + dy, self.pieces)
+        self.check_piece(x + dx, y + dy, self.pieces)
         
