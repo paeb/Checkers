@@ -3,13 +3,13 @@ from Board import Board
 from Color import Color
 
 # Define a dictionary for the four directions in which a piece can move. 
-'''
+
 directions = {["forward","left"]:[-1,1],
                 ["forward","right"]:[1,1],
                 ["backward","left"]:[-1,-1],
                 ["backward","right"]:[1,-1]
                 }
-'''
+
 
 directions = dict()
 
@@ -41,4 +41,3 @@ class Gameplay():
 
 board = Board()
 board.show()
-        
