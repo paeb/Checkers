@@ -36,7 +36,10 @@ class Gameplay():
         if self.check_piece(x + dx, y + dy, self.pieces)[0]: 
             # If the piece where you want to move is the same color as the piece to be moved
             if self.check_piece(x + dx, y + dy, self.pieces)[1] == piece._color:
-                pass
+                print("There is already a piece where you want to move.")
+            
+            # If the piece where you want to move is a different color as the piece to be moved
+            if self.check_piece(x + dx, y + dy, self.pieces)[1] == piece._color:
 
         return None # Change this later
 
