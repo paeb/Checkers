@@ -6,7 +6,7 @@ class Gameplay():
     def __init__(self, pieces):
         self._pieces = pieces
 
-    def check_piece(x,y, pieces): # Check if a piece is in a given position and its color
+    def check_piece(self,x,y, pieces): # Check if a piece is in a given position and its color
         check = False
         type = None
         for p in self._pieces:
@@ -21,9 +21,9 @@ class Gameplay():
         # Make sure that the piece can only move in the directions allowed by its color.
         # Black can move forward; white can move backward.
         if piece._color == Color.BLACK:
-            assert direction[0] == "forward"
+            assert direction[0] == 1
         if piece._color == Color.WHITE:
-            assert direction[0] == "backward"
+            assert direction[0] == -1
 
         
         [dx, dy] = direction
@@ -32,7 +32,9 @@ class Gameplay():
 
         # Check whether there already is a piece where the current piece wishes to move.
         if self.check_piece(x + dx, y + dy, self.pieces)[0]: 
-            pass
+            # If the piece where you want to move is the same color as the piece to be moved
+            if self.check_piece(x + dx, y + dy, self.pieces)[1] == piece._color:
+                pass
 
         return None # Change this later 
 
