@@ -31,7 +31,6 @@ class Gameplay():
 
         [dx, dy] = direction
         [x,y] = [piece._x, piece._y]
-        self.check_piece(x + dx, y + dy, self._pieces)
 
         # Check whether there already is a piece where the current piece wishes to move.
         if self.check_piece(x + dx, y + dy, self.pieces)[0]: 
