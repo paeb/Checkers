@@ -26,7 +26,7 @@ class Gameplay():
     def capture(self, captured_piece):
         all_pieces = self._pieces
         if captured_piece in all_pieces:
-            self.pieces = []
+            self.pieces = [] # = the pieces that are in all_piece and not captured_piece
 
     def move(self,piece,direction):
         # Direction is numerical and given by [dx, dy]
