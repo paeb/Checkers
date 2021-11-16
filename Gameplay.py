@@ -9,10 +9,10 @@ class Gameplay():
         self._player = 1
         self._finished = False
 
-        self._directions = {"fr":[-1,1],
-                            "fl":[-1,-1],
-                            "br":[1,1],
-                            "bl":[1,-1]}
+        self._directions = {"front right":[-1,1],
+                            "front left":[-1,-1],
+                            "back left":[1,1],
+                            "back right":[1,-1]}
 
     def check_piece(self,x,y, pieces): # Check if a piece is in a given position and its color
         check = False
@@ -68,14 +68,19 @@ class Gameplay():
         self._board.show()
 
         while not self._finished:
+            color = None
             if self._player == 1:
-                print("--Player 1 Turn--:")
-                positions = input("Which piece would you like to move? Please input coordinates")
-                piece = Piece(positions[0],positions[1],Color.BLACK)
-                direction = input("Where would you like to move the piece?")
-                self.move(piece,direction)
+                print("--Player 1 Turn--")
+                color = Color.BLACK
             if self._player == 2:
-                pass
+                print("--Player 2 Turn--")
+                color = Color.WHITE
+
+            positions = input("Which piece would you like to move? Please input coordinates")
+            piece = Piece(positions[0],positions[1],color)
+            direction = input("Where would you like to move the piece? Options: {front left, front right, back right, back left").lower()
+            numerical_direction = self._directions[direction]
+            self.move(piece,numerical_direction)
 
 gameplay = Gameplay()
 if __name__ == "__main__":
