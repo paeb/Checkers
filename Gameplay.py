@@ -19,6 +19,11 @@ class Gameplay():
                 type = p._color
         return check, type
 
+    def capture(self, captured_piece):
+        all_pieces = self._pieces
+        if captured_piece in all_pieces:
+            self.pieces = []
+
     def move(self,piece,direction):
         # Direction is numerical and given by [dx, dy]
         
