@@ -46,7 +46,7 @@ class Gameplay():
             elif self.check_piece(x + dx, y + dy, self.pieces)[1] != piece._color:
                 # If there is a piece that's a move over from the piece that you would've jumped.
                 if self.check_piece(x + 2*dx, y + 2*dy, self.pieces)[0]: 
-                    print("There is already a piece where you want to move.") 
+                    print("There is already a piece where you want to move.")
                 # Move the actual piece now. 
                 if not self.check_piece(x + 2*dx, y + 2*dy, self.pieces)[0]: 
                     piece._x = x + 2*dx
