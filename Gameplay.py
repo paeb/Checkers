@@ -5,10 +5,14 @@ from Color import Color
 class Gameplay():
     def __init__(self, pieces):
         self._pieces = pieces
-        self._directions = {"fr":[-1,1],
-                            "fl":[-1,-1],
-                            "br":[1,1],
-                            "bl":[1,-1]}
+        self._board = Board()
+        self._player = 1
+        self._finished = False
+
+        self._directions = {"front right":[-1,1],
+                            "front left":[-1,-1],
+                            "back left":[1,1],
+                            "back right":[1,-1]}
 
     def check_piece(self,x,y, pieces): # Check if a piece is in a given position and its color
         check = False
@@ -62,8 +66,26 @@ class Gameplay():
 
         return None # Change this later
 
-board = Board()
-board.show()
+    def play(self):
+        version = 1.0
+        print("--Checkers Version " + str(version) + "--")
+
+        self._board.show()
+
+        while not self._finished:
+            color = None
+            if self._player == 1:
+                print("--Player 1 Turn--")
+                color = Color.BLACK
+            if self._player == 2:
+                print("--Player 2 Turn--")
+                color = Color.WHITE
+
+            positions = input("Which piece would you like to move? Please input coordinates")
+            piece = Piece(positions[0],positions[1],color)
+            direction = input("Where would you like to move the piece? Options: {front left, front right, back right, back left").lower()
+            numerical_direction = self._directions[direction]
+            self.move(piece,numerical_direction)
 
 gameplay = Gameplay()
 if __name__ == "__main__":
