@@ -39,7 +39,21 @@ class Gameplay():
                 print("There is already a piece where you want to move.")
             
             # If the piece where you want to move is a different color as the piece to be moved
-            if self.check_piece(x + dx, y + dy, self.pieces)[1] == piece._color:
+            elif self.check_piece(x + dx, y + dy, self.pieces)[1] != piece._color:
+                # If there is a piece that's a move over from the piece that you would've jumped.
+                if self.check_piece(x + 2*dx, y + 2*dy, self.pieces)[0]: 
+                    print("There is already a piece where you want to move.") 
+                # Move the actual piece now. 
+                if not self.check_piece(x + 2*dx, y + 2*dy, self.pieces)[0]: 
+                    piece._x = x + 2*dx
+                    piece._y = y + 2*dy
+                    # Capture the piece that was jumped. 
+
+
+
+                # Check whether the move is in bounds or not.
+                # Check whether the piece can jump multiple times.
+                # If the move is not allowed, what do we return?
 
         return None # Change this later
 
