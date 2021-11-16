@@ -5,6 +5,10 @@ from Color import Color
 class Gameplay():
     def __init__(self, pieces):
         self._pieces = pieces
+        self._board = Board()
+        self._player = 1
+        self._finished = False
+
         self._directions = {"fr":[-1,1],
                             "fl":[-1,-1],
                             "br":[1,1],
@@ -40,11 +44,24 @@ class Gameplay():
             
             # If the piece where you want to move is a different color as the piece to be moved
             if self.check_piece(x + dx, y + dy, self.pieces)[1] == piece._color:
-
+                pass
         return None # Change this later
 
-board = Board()
-board.show()
+    def play(self):
+        version = 1.0
+        print("--Checkers Version " + str(version) + "--")
+
+        self._board.show()
+
+        while not self._finished:
+            if self._player == 1:
+                print("--Player 1 Turn--:")
+                positions = input("Which piece would you like to move? Please input coordinates")
+                piece = Piece(positions[0],positions[1],Color.BLACK)
+                direction = input("Where would you like to move the piece?")
+                self.move(piece,direction)
+            if self._player == 2:
+                pass
 
 gameplay = Gameplay()
 if __name__ == "__main__":
