@@ -3,9 +3,9 @@ from Board import Board
 from Color import Color
 
 class Gameplay():
-    def __init__(self, pieces):
-        self._pieces = pieces
+    def __init__(self):
         self._board = Board()
+        self._pieces = self._board.get_pieces()
         self._player = 1
         self._finished = False
 
@@ -14,10 +14,10 @@ class Gameplay():
                             "back left":[1,1],
                             "back right":[1,-1]}
 
-    def check_piece(self,x,y, pieces): # Check if a piece is in a given position and its color
+    def check_piece(self,x,y,pieces): # Check if a piece is in a given position and its color
         check = False
         type = None
-        for p in self._pieces:
+        for p in pieces:
             if (p.x == x and p.y == y):
                 check = True
                 type = p._color
@@ -34,12 +34,13 @@ class Gameplay():
         # Make sure that the piece can only move in the directions allowed by its color.
         # Black can move forward; white can move backward.
         if piece._color == Color.BLACK:
-            assert direction[0] == 1
-        if piece._color == Color.WHITE:
             assert direction[0] == -1
+        if piece._color == Color.WHITE:
+            assert direction[0] == 1
 
-        [dx, dy] = direction
-        [x,y] = [piece._x, piece._y]
+        dx, dy = direction
+        x = piece._x
+        y = piece._y
 
         # Check whether there already is a piece where the current piece wishes to move.
         if self.check_piece(x + dx, y + dy, self.pieces)[0]: 
@@ -82,13 +83,13 @@ class Gameplay():
                 print("--Player 2 Turn--")
                 color = Color.WHITE
 
-            print("Player " + self._player + "'s Turn.")
-            positions = input("Which piece would you like to move? Please input coordinates")
+            print("Player " + str(self._player) + "'s Turn.")
+            positions = input("Which piece would you like to move? Type its coordinates (xy): ")
             piece = Piece(positions[0],positions[1],color)
-            direction = input("Where would you like to move the piece? Choices: front left, front right, back right, back left").lower()
+            direction = input("Where would you like to move the piece? Choices: front left, front right, back right, back left: ").lower()
             numerical_direction = self._directions[direction]
             self.move(piece,numerical_direction)
 
-gameplay = Gameplay()
 if __name__ == "__main__":
-    gameplay.move()
+    gameplay = Gameplay()
+    gameplay.play()
