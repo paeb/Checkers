@@ -76,7 +76,7 @@ class Gameplay():
                             # Capture the piece that was jumped. 
                             self.capture(self.get_piece(x,y))
 
-                    # Check whether the move is in bounds or not.
+                    # Jumps are forced. 
                     # Check whether the piece can jump multiple times.
                     # If the move is not allowed, what do we return?
 
