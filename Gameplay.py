@@ -83,18 +83,20 @@ class Gameplay():
 
         self._board.show()
 
-        while not self._finished:
+        while not self._finished: # game is not finished
             color = None
             if self._player == 1:
                 print("--Player 1 Turn--")
                 color = Color.BLACK
+
             if self._player == 2:
                 print("--Player 2 Turn--")
                 color = Color.WHITE
 
+            print("Player " + self._player + "'s Turn.")
             positions = input("Which piece would you like to move? Please input coordinates")
             piece = Piece(positions[0],positions[1],color)
-            direction = input("Where would you like to move the piece? Options: {front left, front right, back right, back left").lower()
+            direction = input("Where would you like to move the piece? Choices: front left, front right, back right, back left").lower()
             numerical_direction = self._directions[direction]
             self.move(piece,numerical_direction)
 
