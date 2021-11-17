@@ -23,10 +23,22 @@ class Gameplay():
                 type = p._color
         return check, type
 
+    # Get the piece that corresponds to a given position.
+    def get_piece(self,x,y):
+        p = None
+        for piece in self._pieces:
+            if piece._x == x and piece._y == y:
+                p = piece
+        return p
+
+    def check_in_bounds(self,x,y):
+        
+
     def capture(self, captured_piece):
         all_pieces = self._pieces
         if captured_piece in all_pieces:
-            self.pieces = [] # = the pieces that are in all_piece and not captured_piece
+            self.pieces.remove(captured_piece) # = the pieces that are in all_piece and not captured_piece
+        return None
 
     def move(self,piece,direction):
         # Direction is numerical and given by [dx, dy]
@@ -57,8 +69,7 @@ class Gameplay():
                     piece._x = x + 2*dx
                     piece._y = y + 2*dy
                     # Capture the piece that was jumped. 
-
-
+                    self.capture(self.get_piece(x,y))
 
                 # Check whether the move is in bounds or not.
                 # Check whether the piece can jump multiple times.
