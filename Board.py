@@ -44,6 +44,17 @@ class Board:
                 column = 0
                 row = 7
 
+    def get_pieces(self):
+        self._pieces = list()
+
+        for i in range(8):
+            for j in range(8):
+                piece = self._board[i][j]
+                if type(piece) == Piece:
+                    self._pieces.append(piece)
+
+        return self._pieces
+
     def show(self):
 
         print(' ___ ___ ___ ___ ___ ___ ___ ___')
