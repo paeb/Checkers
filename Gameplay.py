@@ -31,8 +31,8 @@ class Gameplay():
                 p = piece
         return p
 
-    def check_in_bounds(self,x,y):
-        pass
+    def check_in_bounds(self,x,y, board_length = 8, board_width = 8): # The dimensions of the board are 8 by 8.
+        return 0 <= x and x < board_length and 0 <= y and y < board_width
 
     def capture(self, captured_piece):
         all_pieces = self._pieces
@@ -54,27 +54,31 @@ class Gameplay():
         x = piece._x
         y = piece._y
 
-        # Check whether there already is a piece where the current piece wishes to move.
-        if self.check_piece(x + dx, y + dy)[0]: 
-            # If the piece where you want to move is the same color as the piece to be moved
-            if self.check_piece(x + dx, y + dy)[1] == piece._color:
-                print("You already have a piece there.")
-            
-            # If the piece where you want to move is a different color as the piece to be moved
-            else:
-                # If there is a piece that's a move over from the piece that you would've jumped.
-                if self.check_piece(x + 2*dx, y + 2*dy)[0]: 
-                    print("There is already a piece where you want to move.")
-                # Move the actual piece now. 
-                else:
-                    piece._x = x + 2*dx
-                    piece._y = y + 2*dy
-                    # Capture the piece that was jumped. 
-                    self.capture(self.get_piece(x,y))
+        # Check whether the piece where you want to move is in bounds.
+        if self.check_in_bounds(x + dx, y + dy):
 
-                # Check whether the move is in bounds or not.
-                # Check whether the piece can jump multiple times.
-                # If the move is not allowed, what do we return?
+            # Check whether there already is a piece where the current piece wishes to move.
+            if self.check_piece(x + dx, y + dy)[0]: 
+                # If the piece where you want to move is the same color as the piece to be moved
+                if self.check_piece(x + dx, y + dy)[1] == piece._color:
+                    print("There is already a piece where you want to move.")
+            
+                # If the piece where you want to move is a different color as the piece to be moved
+                else:
+                    # If there is a piece that's a move over from the piece that you would've jumped.
+                    if self.check_piece(x + 2*dx, y + 2*dy)[0]: 
+                        print("There is already a piece where you want to move.")
+                    # Move the actual piece now. 
+                    else: 
+                        if self.check_in_bounds(x + 2*dx, y + 2*dy):
+                            piece._x = x + 2*dx
+                            piece._y = y + 2*dy
+                            # Capture the piece that was jumped. 
+                            self.capture(self.get_piece(x,y))
+
+                    # Check whether the move is in bounds or not.
+                    # Check whether the piece can jump multiple times.
+                    # If the move is not allowed, what do we return?
 
         return None # Change this later
 
