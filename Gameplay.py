@@ -14,11 +14,11 @@ class Gameplay():
                             "back left":[1,1],
                             "back right":[1,-1]}
 
-    def check_piece(self,x,y,pieces): # Check if a piece is in a given position and its color
+    def check_piece(self,x,y): # Check if a piece is in a given position and its color
         check = False
         type = None
-        for p in pieces:
-            if (p.x == x and p.y == y):
+        for p in self._pieces:
+            if (p._x == x and p._y == y):
                 check = True
                 type = p._color
         return check, type
@@ -32,7 +32,7 @@ class Gameplay():
         return p
 
     def check_in_bounds(self,x,y):
-        
+        pass
 
     def capture(self, captured_piece):
         all_pieces = self._pieces
@@ -55,18 +55,18 @@ class Gameplay():
         y = piece._y
 
         # Check whether there already is a piece where the current piece wishes to move.
-        if self.check_piece(x + dx, y + dy, self.pieces)[0]: 
+        if self.check_piece(x + dx, y + dy)[0]: 
             # If the piece where you want to move is the same color as the piece to be moved
-            if self.check_piece(x + dx, y + dy, self.pieces)[1] == piece._color:
-                print("There is already a piece where you want to move.")
+            if self.check_piece(x + dx, y + dy)[1] == piece._color:
+                print("You already have a piece there.")
             
             # If the piece where you want to move is a different color as the piece to be moved
-            elif self.check_piece(x + dx, y + dy, self.pieces)[1] != piece._color:
+            else:
                 # If there is a piece that's a move over from the piece that you would've jumped.
-                if self.check_piece(x + 2*dx, y + 2*dy, self.pieces)[0]: 
+                if self.check_piece(x + 2*dx, y + 2*dy)[0]: 
                     print("There is already a piece where you want to move.")
                 # Move the actual piece now. 
-                if not self.check_piece(x + 2*dx, y + 2*dy, self.pieces)[0]: 
+                else:
                     piece._x = x + 2*dx
                     piece._y = y + 2*dy
                     # Capture the piece that was jumped. 
@@ -95,7 +95,7 @@ class Gameplay():
                 color = Color.WHITE
 
             print("Player " + str(self._player) + "'s Turn.")
-            positions = input("Which piece would you like to move? Type its coordinates (xy): ")
+            positions = input("Which piece would you like to move? Type its coordinates (row,column): ")
             piece = Piece(positions[0],positions[1],color)
             direction = input("Where would you like to move the piece? Choices: front left, front right, back right, back left: ").lower()
             numerical_direction = self._directions[direction]
