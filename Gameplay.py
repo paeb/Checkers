@@ -35,6 +35,7 @@ class Gameplay():
         else:
             return False
 
+    # King all of the pieces that should be kinged.
     def king(self):
         pieces = self._pieces
         for piece in pieces:
