@@ -44,6 +44,13 @@ class Board:
                 column = 0
                 row = 7
 
+    def update_pieces(self,x,y,dx,dy,piece,capture=False):
+        self._board[x][y] = 0
+        self._board[x + dx][y + dy] = piece
+
+        if capture:
+            self._board[int(x + dx/2)][int(y + dy/2)] = 0
+
     def get_pieces(self):
         self._pieces = list()
 

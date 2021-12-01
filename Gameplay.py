@@ -11,17 +11,18 @@ class Gameplay():
 
         self._directions = {"front right":[-1,1],
                             "front left":[-1,-1],
-                            "back left":[1,1],
-                            "back right":[1,-1]}
+                            "back left":[1,-1],
+                            "back right":[1,1]}
 
     def check_piece(self,x,y): # Check if a piece is in a given position and its color
-        check = False
-        type = None
-        for p in self._pieces:
-            if (p._x == x and p._y == y):
-                check = True
-                type = p._color
-        return check, type
+        return self._board._board[x][y] != 0
+        # check = False
+        # type = None
+        # for p in self._pieces:
+        #     if (p._x == x and p._y == y):
+        #         check = True
+        #         type = p._color
+        # return check, type
 
     # Get the piece that corresponds to a given position.
     def get_piece(self,x,y):
@@ -54,31 +55,29 @@ class Gameplay():
         x = piece._x
         y = piece._y
 
-        # Check whether the piece where you want to move is in bounds.
+        # Check whether the place where you want to move is in bounds.
         if self.check_in_bounds(x + dx, y + dy):
-
             # Check whether there already is a piece where the current piece wishes to move.
-            if self.check_piece(x + dx, y + dy)[0]: 
-                # If the piece where you want to move is the same color as the piece to be moved
-                if self.check_piece(x + dx, y + dy)[1] == piece._color:
-                    print("There is already a piece where you want to move.")
-            
-                # If the piece where you want to move is a different color as the piece to be moved
+            if self.check_piece(x + dx, y + dy):
+                # If there is a piece that's a move over from the piece that you would've jumped.
+                if self.check_piece(x + 2*dx, y + 2*dy):
+                    print("Yeah no, there's a piece there.")
                 else:
-                    # If there is a piece that's a move over from the piece that you would've jumped.
-                    if self.check_piece(x + 2*dx, y + 2*dy)[0]: 
-                        print("There is already a piece where you want to move.")
-                    # Move the actual piece now. 
-                    else: 
-                        if self.check_in_bounds(x + 2*dx, y + 2*dy):
-                            piece._x = x + 2*dx
-                            piece._y = y + 2*dy
-                            # Capture the piece that was jumped. 
-                            self.capture(self.get_piece(x,y))
-
+                    if self.check_in_bounds(x + 2*dx, y + 2*dy):
+                        piece._x = x + 2*dx
+                        piece._y = y + 2*dy
+                        # Capture the piece that was jumped. 
+                        self._board.update_pieces(x,y,2*dx,2*dy,piece,capture=True)
                     # Check whether the move is in bounds or not.
                     # Check whether the piece can jump multiple times.
                     # If the move is not allowed, what do we return?
+            else:
+                piece._x = x + dx
+                piece._y = y + dy
+
+                self._board.update_pieces(x,y,dx,dy,piece)
+        else:
+            print("Not in bounds.")
 
         return None # Change this later
 
@@ -99,11 +98,18 @@ class Gameplay():
                 color = Color.WHITE
 
             print("Player " + str(self._player) + "'s Turn.")
-            positions = input("Which piece would you like to move? Type its coordinates (row,column): ")
+            positions = input("Which piece would you like to move? Type its row,column: ").split(",")
             piece = Piece(positions[0],positions[1],color)
             direction = input("Where would you like to move the piece? Choices: front left, front right, back right, back left: ").lower()
             numerical_direction = self._directions[direction]
             self.move(piece,numerical_direction)
+
+            self._board.show()
+
+            if self._player == 1:
+                self._player = 2
+            else:
+                self._player = 1
 
 if __name__ == "__main__":
     gameplay = Gameplay()
