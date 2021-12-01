@@ -23,6 +23,17 @@ class Gameplay():
                 type = p._color
         return check, type
 
+    # Check whether a given piece is kingable
+    def check_king(self, piece):
+        if piece._color == Color.WHITE:
+            if piece._x == 7:
+                return True
+        elif piece._color == Color.BLACK:
+            if piece._x == 0:
+                return True
+        else:
+            return False
+
     # Get the piece that corresponds to a given position.
     def get_piece(self,x,y):
         p = None
