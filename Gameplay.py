@@ -109,7 +109,28 @@ class Gameplay():
     def check_win(self):
         pieces = self._pieces
         black_pieces = [piece for piece in pieces if piece._color == Color.BLACK]
-        
+        white_pieces = [piece for piece in pieces if piece._color == Color.WHITE]
+
+        # Check if each side can move or jump. If there are no pieces, then both variables will remain False.
+        black_can_move = False
+        white_can_move = False
+
+        for black_piece in black_pieces:
+            if self.can_move(black_piece) or self.can_jump(black_piece):
+                black_can_move = True
+
+        for white_piece in white_pieces:
+            if self.can_move(white_piece) or self.can_jump(white_piece):
+                white_can_move = True
+
+        winning_color = None
+        if not black_can_move:
+            winning_color = Color.WHITE
+        elif not white_can_move:
+            winning_color = Color.BLACK
+
+        return winning_color
+
         # Check if any pieces can move or jump, then check if there are any pieces at all
 
     def move(self,piece,direction):
