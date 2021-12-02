@@ -1,6 +1,7 @@
 from Piece import Piece
 from Board import Board
 from Color import Color
+import time
 
 class Gameplay():
     def __init__(self):
@@ -15,7 +16,12 @@ class Gameplay():
                             "back right":[1,1]}
 
     def check_piece(self,x,y): # Check if a piece is in a given position and its color
-        return self._board._board[x][y] != 0
+        check = False
+        type = None
+        if self._board._board[x][y] != 0:
+            check = True
+            type = self._board._board[x][y]._color
+        return check,type
         # check = False
         # type = None
         # for p in self._pieces:
@@ -48,22 +54,32 @@ class Gameplay():
             dx = -1
         elif piece._color == Color.WHITE:
             dx = 1
+
+        possible_jumps = list()
+
         for dy in [-1,1]:
             # Check whether the piece where you want to move is in bounds.
             if self.check_in_bounds(x + dx, y + dy):
                 # Check whether there already is a piece where the current piece wishes to move.
-                if self.check_piece(x + dx, y + dy)[0]: 
+                if self.check_piece(x + dx, y + dy)[0]:
                     # If the piece where you want to move is a different color as the piece to be moved
                     if self.check_piece(x + dx, y + dy)[1] != piece._color:
-                        # Check whether the piece where you want to move is in bounds.
-                        if self.check_in_bounds(x + dx, y + dy):
-                            # If there is not a piece that's a move over from the piece that you would've jumped.
-                            if not self.check_piece(x + 2*dx, y + 2*dy)[0]: 
-                                return True
-        else:
-             return False
+                        # If there is not a piece that's a move over from the piece that you would've jumped.
+                        if not self.check_piece(x+2*dx, y+2*dy)[0]: 
+                            possible_jumps.append(dy)
 
-                    
+        if len(possible_jumps) == 2: # The player has two possible jumps
+            string = input("You have two possible jumping options. Please choose left or right: ").lower()
+            num_directions = {"left": -1, "right": 1}
+            self.move(piece, [dx,num_directions[string]])
+            return True
+        elif len(possible_jumps) == 1:
+            print("You have to jump over the opponent's piece. Automatically jumping...")
+            time.sleep(3) # wait so that the player can see the message
+            self.move(piece, [dx,possible_jumps[0]])
+            return True
+        else:
+            return False
 
     def move(self,piece,direction):
         # Direction is numerical and given by [dx, dy].
@@ -83,10 +99,10 @@ class Gameplay():
         # Check whether the place where you want to move is in bounds.
         if self.check_in_bounds(x + dx, y + dy):
             # Check whether there already is a piece where the current piece wishes to move.
-            if self.check_piece(x + dx, y + dy):
+            if self.check_piece(x + dx, y + dy)[0]:
                 # If there is a piece that's a move over from the piece that you would've jumped.
-                if self.check_piece(x + 2*dx, y + 2*dy):
-                    print("Yeah no, there's a piece there.")
+                if self.check_piece(x + 2*dx, y + 2*dy)[0]:
+                    print("Can't move; there's a piece in that location.")
                 else:
                     if self.check_in_bounds(x + 2*dx, y + 2*dy):
                         piece._x = x + 2*dx
@@ -123,11 +139,24 @@ class Gameplay():
                 color = Color.WHITE
 
             print("Player " + str(self._player) + "'s Turn.")
-            positions = input("Which piece would you like to move? Type its row,column: ").split(",")
-            piece = Piece(positions[0],positions[1],color)
-            direction = input("Where would you like to move the piece? Choices: front left, front right, back right, back left: ").lower()
-            numerical_direction = self._directions[direction]
-            self.move(piece,numerical_direction)
+
+            jumped_piece = False
+
+            for piece in self._board.get_pieces():
+                if piece._color == color:
+                    if self.can_jump(piece): # this will check if a piece can jump and jump the piece if possible
+                        jumped_piece = True
+                        break
+                        
+            if not jumped_piece: # the player can only choose their move if their piece didn't jump
+                positions = input("Which piece would you like to move? Type its row,column: ").split(",")
+                piece = self._board._board[int(positions[0])][int(positions[1])]
+                while piece == 0 or piece._color != color:
+                    positions = input("Please choose a valid piece on the board. Type its row,column: ").split(",")
+                    piece = self._board._board[int(positions[0])][int(positions[1])]
+                direction = input("Where would you like to move the piece? Choices: front left, front right, back right, back left: ").lower()
+                numerical_direction = self._directions[direction]
+                self.move(piece,numerical_direction)
 
             self._board.show()
 
