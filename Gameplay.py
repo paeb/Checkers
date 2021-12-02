@@ -63,26 +63,54 @@ class Gameplay():
     def can_jump(self, piece):
         x = piece._x
         y = piece._y
-        if piece._color == Color.BLACK:
-            dx = -1
-        elif piece._color == Color.WHITE:
-            dx = 1
-        for dy in [-1,1]:
-            # Check whether the piece where you want to move is in bounds.
-            if self.check_in_bounds(x + dx, y + dy):
-                # Check whether there already is a piece where the current piece wishes to move.
-                if self.check_piece(x + dx, y + dy)[0]: 
-                    # If the piece where you want to move is a different color as the piece to be moved
-                    if self.check_piece(x + dx, y + dy)[1] != piece._color:
-                        # Check whether the piece where you want to move is in bounds.
-                        if self.check_in_bounds(x + dx, y + dy):
-                            # If there is not a piece that's a move over from the piece that you would've jumped.
-                            if not self.check_piece(x + 2*dx, y + 2*dy)[0]: 
-                                return True
+        if piece._color == Color.BLACK and not piece._is_king:
+            dx_list = [-1]
+        elif piece._color == Color.WHITE and not piece._is_king:
+            dx_list =[1]
         else:
-             return False
+            dx_list = [-1,1]
+        for dx in dx_list:
+            for dy in [-1,1]:
+                # Check whether the piece where you want to move is in bounds.
+                if self.check_in_bounds(x + dx, y + dy):
+                    # Check whether there already is a piece where the current piece wishes to move.
+                    if self.check_piece(x + dx, y + dy)[0]: 
+                        # If the piece where you want to move is a different color as the piece to be moved
+                        if self.check_piece(x + dx, y + dy)[1] != piece._color:
+                            # Check whether the piece where you want to move is in bounds.
+                            if self.check_in_bounds(x + dx, y + dy):
+                                # If there is not a piece that's a move over from the piece that you would've jumped.
+                                if not self.check_piece(x + 2*dx, y + 2*dy)[0]: 
+                                    return True
+            else:
+                return False
 
-                    
+    # Check if a piece can execute a non-capture move.
+    def can_move(self,piece):
+        dy_list = [-1,1]
+        x = piece._x
+        y = piece._y
+        if not piece._is_king:
+            if piece._color == Color.BLACK:
+                dx_list = [-1]
+            elif piece._color == Color.WHITE:
+                dx_list = [1]
+        else:
+            dx_list = [-1,1]
+        for dy in dy_list:
+            for dx in dx_list:
+                if self.check_in_bounds(x + dx, y + dy):
+                    if self.get_piece(x + dx, y + dy) == None:
+                        return True
+        else:
+            return False
+
+    # Check if there is a winner
+    def check_win(self):
+        pieces = self._pieces
+        black_pieces = [piece for piece in pieces if piece._color == Color.BLACK]
+        
+        # Check if any pieces can move or jump, then check if there are any pieces at all
 
     def move(self,piece,direction):
         # Direction is numerical and given by [dx, dy].
