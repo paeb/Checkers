@@ -30,6 +30,25 @@ class Gameplay():
         #         type = p._color
         # return check, type
 
+    # Check whether a given piece is kingable
+    def check_king(self, piece):
+        if piece._color == Color.WHITE:
+            if piece._x == 7:
+                return True
+        elif piece._color == Color.BLACK:
+            if piece._x == 0:
+                return True
+        else:
+            return False
+
+    # King all of the pieces that should be kinged.
+    def king(self):
+        pieces = self._pieces
+        for piece in pieces:
+            if self.check_king(piece):
+                piece._is_king = True
+        return None
+
     # Get the piece that corresponds to a given position.
     def get_piece(self,x,y):
         p = None
@@ -87,10 +106,11 @@ class Gameplay():
         
         # Make sure that the piece can only move in the directions allowed by its color.
         # Black can move forward; white can move backward.
-        if piece._color == Color.BLACK:
-            assert direction[0] == -1
-        if piece._color == Color.WHITE:
-            assert direction[0] == 1
+        if not piece._is_king:
+            if piece._color == Color.BLACK:
+                assert direction[0] == -1
+            if piece._color == Color.WHITE:
+                assert direction[0] == 1
 
         dx, dy = direction
         x = piece._x
@@ -131,10 +151,12 @@ class Gameplay():
         while not self._finished: # game is not finished
             color = None
             if self._player == 1:
+                self.king()
                 print("--Player 1 Turn--")
                 color = Color.BLACK
 
             if self._player == 2:
+                self.king()
                 print("--Player 2 Turn--")
                 color = Color.WHITE
 
