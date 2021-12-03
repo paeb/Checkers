@@ -108,9 +108,13 @@ class Gameplay():
         # Black can move forward; white can move backward.
         if not piece._is_king:
             if piece._color == Color.BLACK:
-                assert direction[0] == -1
+                while direction[0] != -1:
+                    direction = input("Please type a valid direction. Choices: front left, front right: ").lower()
+                    direction = self._directions[direction]
             if piece._color == Color.WHITE:
-                assert direction[0] == 1
+                while direction[0] != 1:
+                    direction = input("Please type a valid direction. Choices: back left, back right: ").lower()
+                    direction = self._directions[direction]
 
         dx, dy = direction
         x = piece._x
