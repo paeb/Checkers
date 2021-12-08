@@ -154,6 +154,9 @@ class Gameplay():
 
         while not self._finished: # game is not finished
             color = None
+            
+
+
             if self._player == 1:
                 self.king()
                 print("--Player 1 Turn--")
@@ -185,6 +188,12 @@ class Gameplay():
                 self.move(piece,numerical_direction)
 
             self._board.show()
+
+            if self.check_win() != None:
+                self._finished = True
+                win_dict = {Color.BLACK: "Black", Color.WHITE: "White"}
+                winner = win_dict[self.check_win()]
+                print(f"--{winner} wins!--")
 
             if self._player == 1:
                 self._player = 2
