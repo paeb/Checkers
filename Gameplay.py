@@ -217,8 +217,8 @@ class Gameplay():
 
             self._board.show()
 
-            #if self.check_win() != None:
-            if False:
+            if self.check_win() != None:
+            
                 self._finished = True
                 win_dict = {Color.BLACK: "Black", Color.WHITE: "White"}
                 winner = win_dict[self.check_win()]
