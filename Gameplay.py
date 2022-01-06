@@ -100,6 +100,30 @@ class Gameplay():
         else:
             return False
 
+    def can_move(self,piece): #Check if a given piece can move
+        output = False
+        
+        x = piece._x
+        y = piece._y
+        color = piece._color
+        is_king = piece._is_king
+
+        dx_list = [-1,1]
+        dy_list = [-1,1]
+
+        for dx in dx_list:
+            for dy in dy_list:
+                if self.check_in_bounds(x + dx, y + dy):
+                    # make the output True if the piece can move. 
+                    if not piece._is_king:
+                        if piece._color == Color.BLACK: 
+                            if dx == -1 and not self.check_piece(x+dx,y+dy)[0]:
+                                output = True
+                        if piece._color == Color.WHITE:
+                            if dx == 1 and not self.check_piece(x+dx,y+dy)[0]:
+                                output = True
+        return output
+
     # Check if there is a winner
     def check_win(self):
         pieces = self._pieces
