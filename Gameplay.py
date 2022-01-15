@@ -100,6 +100,58 @@ class Gameplay():
         else:
             return False
 
+    def can_move(self,piece): #Check if a given piece can move
+        output = False
+        
+        x = piece._x
+        y = piece._y
+        color = piece._color
+        is_king = piece._is_king
+
+        dx_list = [-1,1]
+        dy_list = [-1,1]
+
+        for dx in dx_list:
+            for dy in dy_list:
+                if self.check_in_bounds(x + dx, y + dy):
+                    # make the output True if the piece can move. 
+                    if not piece._is_king:
+                        if piece._color == Color.BLACK: 
+                            if dx == -1 and not self.check_piece(x+dx,y+dy)[0]:
+                                output = True
+                        if piece._color == Color.WHITE:
+                            if dx == 1 and not self.check_piece(x+dx,y+dy)[0]:
+                                output = True
+        return output
+
+    # Check if there is a winner
+    def check_win(self):
+        pieces = self._pieces
+        black_pieces = [piece for piece in pieces if piece._color == Color.BLACK]
+        white_pieces = [piece for piece in pieces if piece._color == Color.WHITE]
+
+        # Check if each side can move or jump. If there are no pieces, then both variables will remain False.
+        black_can_move = False
+        white_can_move = False
+
+        for black_piece in black_pieces:
+            if self.can_move(black_piece) or self.can_jump(black_piece):
+                black_can_move = True
+
+        for white_piece in white_pieces:
+            if self.can_move(white_piece) or self.can_jump(white_piece):
+                white_can_move = True
+
+        winning_color = None
+        if not black_can_move:
+            winning_color = Color.WHITE
+        elif not white_can_move:
+            winning_color = Color.BLACK
+
+        return winning_color
+
+        # Check if any pieces can move or jump, then check if there are any pieces at all
+
     def move(self,piece,direction):
         # Direction is numerical and given by [dx, dy].
         # We might have mixed up dx and dy.
@@ -189,8 +241,8 @@ class Gameplay():
 
             self._board.show()
 
-            #if self.check_win() != None:
-            if False:
+            if self.check_win() != None:
+            
                 self._finished = True
                 win_dict = {Color.BLACK: "Black", Color.WHITE: "White"}
                 winner = win_dict[self.check_win()]
