@@ -36,6 +36,7 @@ from tf_agents.utils import common
 class Environment(tf_py_environment.PyEnvironment):
 
   def __init__(self):
+    # we need to define array_spec
     self._action_spec = array_spec.BoundedArraySpec(
         shape=(), dtype=np.int32, minimum=0, maximum=1, name='action')
     self._observation_spec = array_spec.BoundedArraySpec(
@@ -44,20 +45,20 @@ class Environment(tf_py_environment.PyEnvironment):
     self._state = self._gameplay._board
     self._episode_ended = False
 
-  def action_spec(self):
+  def action_spec(self): # return the action
     return self._action_spec
 
-  def observation_spec(self):
+  def observation_spec(self): # return the observation
     return self._observation_spec
 
-  def _reset(self):
-    self._state = 0
+  def _reset(self): # reset the environment
+    self._state = self._gameplay._board
     self._episode_ended = False
     return ts.restart(np.array([self._state], dtype=np.int32))
 
-  def _step(self, action, piece): # obtaining the reward from the environment at any given timestep
+  def _step(self, action, piece): # obtain the reward from the environment at any given timestep/round
 
-    # first, we need to specify a piece with its (x,y) coordinates
+    # we need to specify a piece with its (x,y) coordinates
 
     if action == "front left":
       # move the piece to the left
@@ -74,22 +75,22 @@ class Environment(tf_py_environment.PyEnvironment):
     else:
       raise ValueError('action should be front left, front right, back left, or back right.')
 
-    if self._gameplay.check_win() is not None: # if someone won
+    if self._gameplay.check_win() is not None: # if the player or AI won
 
-      count_white = 0
-      count_black = 0
+      count_white = 0 # number of white pieces on the board
+      count_black = 0 # number of black pieces on the board
 
       for piece in self._gameplay._pieces:
         if piece._color == Color.WHITE:
           count_white += 1
         elif piece._color == Color.BLACK:
           count_black += 1
-        else:
-          print("N/A")
 
       # let's say that white is the AI, and black is the player
 
-      reward = count_white - count_black # if the AI captures opponent pieces, then higher reward
+      reward = count_white - count_black 
+      # if the AI captures the player's pieces or preserves its own pieces,
+      # then it returns a more positive reward
 
       return ts.termination(np.array([self._state], dtype=np.int32), reward)
 

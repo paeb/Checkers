@@ -44,6 +44,7 @@ class Board:
                 column = 0
                 row = 7
 
+    # update the location of the pieces on the board
     def update_pieces(self,x,y,dx,dy,piece,capture=False):
         self._board[x][y] = 0
         self._board[x + dx][y + dy] = piece
@@ -51,6 +52,7 @@ class Board:
         if capture:
             self._board[int(x + dx/2)][int(y + dy/2)] = 0
 
+    # return a list of the pieces on the board
     def get_pieces(self):
         self._pieces = list()
 
@@ -62,6 +64,7 @@ class Board:
 
         return self._pieces
 
+    # display the checkers board in Terminal (with the numbers on the sides to indicate positions)
     def show(self):
 
         print(' ___ ___ ___ ___ ___ ___ ___ ___')
