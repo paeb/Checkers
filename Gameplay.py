@@ -4,12 +4,13 @@ from Color import Color
 import time
 
 class Gameplay():
-    def __init__(self):
+    def __init__(self): # Initialize the gameplay
         self._board = Board()
         self._pieces = self._board.get_pieces()
         self._player = 1
         self._finished = False
 
+        # These are the directions that the pieces can move in.
         self._directions = {"front right":[-1,1],
                             "front left":[-1,-1],
                             "back left":[1,-1],
@@ -22,13 +23,6 @@ class Gameplay():
             check = True
             type = self._board._board[x][y]._color
         return check,type
-        # check = False
-        # type = None
-        # for p in self._pieces:
-        #     if (p._x == x and p._y == y):
-        #         check = True
-        #         type = p._color
-        # return check, type
 
     # Check whether a given piece is kingable
     def check_king(self, piece):
@@ -66,6 +60,8 @@ class Gameplay():
             self.pieces.remove(captured_piece) # = the pieces that are in all_piece and not captured_piece
         return None
 
+    # Check whether a piece can jump. If it has two jumps possible, then the player can choose which
+    # jumps to take. If one jump is possible, then automatically take that jump.
     def can_jump(self, piece):
         x = piece._x
         y = piece._y
@@ -92,7 +88,7 @@ class Gameplay():
             num_directions = {"left": -1, "right": 1}
             self.move(piece, [dx,num_directions[string]])
             return True
-        elif len(possible_jumps) == 1:
+        elif len(possible_jumps) == 1: # The player has one possible jump
             print("You have to jump over the opponent's piece. Automatically jumping...")
             time.sleep(3) # wait so that the player can see the message
             self.move(piece, [dx,possible_jumps[0]])
@@ -124,13 +120,15 @@ class Gameplay():
                                 output = True
         return output
 
-    # Check if there is a winner
+    # Check if there is a winner.
+    # We need to check if any pieces can move or jump and if there are any pieces at all (both cases must be covered)
     def check_win(self):
         pieces = self._pieces
         black_pieces = [piece for piece in pieces if piece._color == Color.BLACK]
         white_pieces = [piece for piece in pieces if piece._color == Color.WHITE]
 
-        # Check if each side can move or jump. If there are no pieces, then both variables will remain False.
+        # Check if each side can move or jump. If there are no pieces, then both variables will remain False,
+        # which means that it will not declare that a player has won (yet).
         black_can_move = False
         white_can_move = False
 
@@ -150,11 +148,9 @@ class Gameplay():
 
         return winning_color
 
-        # Check if any pieces can move or jump, then check if there are any pieces at all
 
     def move(self,piece,direction):
         # Direction is numerical and given by [dx, dy].
-        # We might have mixed up dx and dy.
         
         # Make sure that the piece can only move in the directions allowed by its color.
         # Black can move forward; white can move backward.
@@ -185,9 +181,7 @@ class Gameplay():
                         piece._y = y + 2*dy
                         # Capture the piece that was jumped. 
                         self._board.update_pieces(x,y,2*dx,2*dy,piece,capture=True)
-                    # Check whether the move is in bounds or not.
-                    # Check whether the piece can jump multiple times.
-                    # If the move is not allowed, what do we return?
+                   
             else:
                 piece._x = x + dx
                 piece._y = y + dy
@@ -196,7 +190,7 @@ class Gameplay():
         else:
             print("Not in bounds.")
 
-        return None # Change this later
+        return None 
 
     def play(self):
         version = 1.0
@@ -204,11 +198,10 @@ class Gameplay():
 
         self._board.show()
 
-        while not self._finished: # game is not finished
+        while not self._finished: # While the game is not finished
             color = None
             
-
-
+            # Print whose turn it is
             if self._player == 1:
                 self.king()
                 print("--Player 1 Turn--")
@@ -241,6 +234,7 @@ class Gameplay():
 
             self._board.show()
 
+            # If a player won, then display a message that declares the winner and end the game.
             if self.check_win() != None:
             
                 self._finished = True
@@ -248,6 +242,7 @@ class Gameplay():
                 winner = win_dict[self.check_win()]
                 print(f"--{winner} wins!--")
 
+            # Alternate the players' turns
             if self._player == 1:
                 self._player = 2
             else:
