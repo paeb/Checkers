@@ -53,7 +53,6 @@ eval_interval = 1000
 # It then chooses an action, and obtains a reward and new observation
 
 # we can create a custom environment
-
 env = Environment()
 time_step = env.reset()
 cumulative_reward = time_step.reward
@@ -61,15 +60,15 @@ cumulative_reward = time_step.reward
 train_py_env = Environment()
 eval_py_env = Environment()
 
-# we need to convert this Python environment into a Tensorflow one
+# we need to convert this Python environment into Tensorflow
 train_env = tf_py_environment.TFPyEnvironment(train_py_env)
 eval_env = tf_py_environment.TFPyEnvironment(eval_py_env)
 
 # AGENT - algorithm used to make decisions
 
-# Specifically, we're using DQN agent (deep q network)
-# Basically it's a neural network model that predicts the Q values for all actions
-# Basically it uses the Keras library to build the network
+# Specifically, we're using DQN agent (Deep Q Network)
+# It's a neural network model that predicts the Q values for all actions
+# Uses the Keras library to build the network
 # There is 1 output for each possible action
 
 fc_layer_params = (100, 50)
@@ -109,7 +108,7 @@ agent = dqn_agent.DqnAgent(
 agent.initialize()
 
 # POLICY - how an agent acts in the environment
-# keep training the DQN until policy produces the best outcome
+# keep training the DQN agent until policy produces the best outcome
 # policies select the best action at each timestep (or round #)
 
 eval_policy = agent.policy
@@ -143,7 +142,7 @@ def compute_avg_return(environment, policy, num_episodes=10):
 compute_avg_return(eval_env, random_policy, num_eval_episodes)
 
 # REPLAY BUFFER
-# Stores the data collected from the environment
+# Stores the data from the environment
 
 table_name = 'uniform_table'
 replay_buffer_signature = tensor_spec.from_spec(
@@ -175,7 +174,7 @@ rb_observer = reverb_utils.ReverbAddTrajectoryObserver(
 # Execute a random policy in the environment, and record the data
 
 # DATA COLLECTION
-# Actively collects data from the environment and stores it in the buffer
+# Collect data from the environment
 
 py_driver.PyDriver(
     env,
@@ -192,7 +191,7 @@ dataset = replay_buffer.as_dataset(
 
 iterator = iter(dataset)
 
-# TRAIN THE DQN AGENT - Use the data collected
+# TRAIN THE DQN AGENT
 
 # (Optional) Optimize by wrapping some of the code in a graph using TF function.
 agent.train = common.function(agent.train)
